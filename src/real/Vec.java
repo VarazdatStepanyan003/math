@@ -46,7 +46,7 @@ public class Vec {
 		for(double a: v){
 			res += a * a;
 		}
-		return res;
+		return Math.sqrt(res);
 	}
 
 	public boolean isZero(){
@@ -67,12 +67,17 @@ public class Vec {
 		return true;
 	}
 
+	public double[] getV(){
+		return v;
+	}
+
 	@Override
 	public String toString(){
 		StringBuilder s = new StringBuilder();
 		for(double vv: v){
-			s.append(vv).append(",");
+			s.append(vv);
+			if(vv != v[v.length - 1]) s.append(", ");
 		}
-		return super.toString();
+		return s.toString();
 	}
 }

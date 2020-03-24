@@ -58,13 +58,14 @@ public class PSDPLE {
 			@Override
 			public Vec act(Vec a) throws DimException{
 				if(a.getDim() != inputDim()) throw new DimException();
-				return new Vec(1);
+				double[] c = {a.norm()};
+				return new Vec(c);
 			}
 		};
 		PSDPLE problem = new PSDPLE(s, b);
 
 		double[] a = {0, 0};
-		System.out.println(problem.result(new Vec(a), 10));
+		System.out.println(problem.result(new Vec(a), 100));
 	}
 
 	private Set s;
@@ -78,25 +79,28 @@ public class PSDPLE {
 	public Vec result(Vec a, int n) throws OutOfBoundariesException, DimException{
 		if(!s.hasElement(a)) throw new OutOfBoundariesException();
 		Vec res = new Vec(border.outputDim());
-		while(n > 0){
+		int nn = n;
+		while(nn > 0){
 			res = res.add(border.act(randomChain(a)));
-			n--;
+			nn--;
 		}
 		return res.dot(1.0 / n);
 	}
 
 	private Vec randomChain(Vec a) throws DimException{
+		Vec c = a;
 		Vec b = a.add(new Vec(a.getDim()));
 		do{
-			b.add(randomVec(a.getDim()));
+			c = b;
+			b = c.add(randomVec(a.getDim()));
 		} while(s.hasElement(b));
-		return hit(a, b);
+		return hit(c, b);
 	}
 
-	private Vec randomVec(int dim) throws DimException{
+	private Vec randomVec(int dim){
 		double a[] = new double[dim];
 		for(int i = 0;i < dim;i++){
-			a[i] = Math.random() * 2 - 1;
+			a[i] = Math.random() * 0.1 - 0.05;
 		}
 		return new Vec(a);
 	}
